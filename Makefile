@@ -7,6 +7,7 @@ pull:
 	docker pull node:0.12
 
 init:
+	mkdir ~/opt ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/htdocs ~/opt/www
 	wget https://github.com/phalcon/cphalcon/archive/1.3.5.tar.gz -O php/cphalcon.tgz
 	wget https://pecl.php.net/get/gearman-1.1.2.tgz -O php/gearman.tgz
 	wget https://pecl.php.net/get/redis-2.2.7.tgz -O php/redis.tgz
