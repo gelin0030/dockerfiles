@@ -9,14 +9,15 @@ Mac系统，已经安装过以下组件：
 - Homebrew
 - pip
 
-```
+```shell
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew update
 brew install wget
 sudo easy_install pip
 ```
 
-## 安装Docker/Boot2Docker/Docker-Compose
+## 安装Docker/Boot2Docker/Docker-Compose 推荐直接下载 [docker-for-mac](https://docs.docker.com/docker-for-mac/) 省去安装下列 boot2docker 步骤
+
 
 ```
 brew update
@@ -73,32 +74,20 @@ DOCKER_OPTS=" --registry-mirror http://192.168.11.180:5000 --insecure-registry 1
 service docker restart
 ```
 
-## 启动EvaSkeleton
+## 启动Dockerfiles
 
-准备基础的目录，由于Mac下默认允许挂载/Users/的文件，因此本套方案将系统文件挂载位置强制设置为`~/opt/`
-
-- ~/opt/data   存放MySQL数据库，Elastic数据
-- ~/opt/htdocs 项目代码
-- ~/opt/log    存放所有输出Log
-
-创建这些目录:
-
-```
-mkdir ~/opt ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/htdocs
-```
 
 Clone本项目
 
-```
-cd ~/opt/htdocs
-git clone https://github.com/EvaEngine/Dockerfiles.git
-cd Dockerfiles
+```shell
+cd ~
+https://github.com/gelin0030/Docker.git
 ```
 
 下载镜像及构建
 
 ```
-make dl
+make init
 make build
 ```
 
@@ -112,20 +101,10 @@ docker-compose up
 绑定域名
 
 ```
-sudo vi /etc/hosts
+sudo vim /etc/hosts
 加入
-192.168.59.103 docker local.evaengine.com static.evaengine.com
+192.168.59.103 docker
 ```
 
 现在可以通过访问`http://docker/`来查看Web服务器根目录
 
-
-构建EvaSkeleton项目文件
-
-```
-cd ~/opt/htdocs
-git clone https://github.com/EvaEngine/EvaSkeleton.git
-cd EvaSkeleton
-cp config/config.local.dev.php config/config.local.php
-make install
-```
