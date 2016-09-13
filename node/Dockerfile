@@ -1,6 +1,5 @@
-FROM node:0.12
-
-RUN npm install -g cnpm gulp bower && npm cache clear
+FROM node:4.5
+RUN npm install -g cnpm gulp bower --registry=http://registry.npm.taobao.org  --disturl=http://npm.taobao.org/mirrors/node && npm cache clear
 
 WORKDIR /opt
 EXPOSE 8001
