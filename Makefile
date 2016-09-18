@@ -7,7 +7,6 @@ pull:
 	docker pull node:0.12
 
 init:
-	mkdir ~/opt ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/htdocs ~/opt/www
 	wget https://github.com/phalcon/cphalcon/archive/1.3.5.tar.gz -O php/cphalcon.tgz
 	wget https://pecl.php.net/get/gearman-1.1.2.tgz -O php/gearman.tgz
 	wget https://pecl.php.net/get/redis-2.2.7.tgz -O php/redis.tgz
@@ -17,13 +16,14 @@ init:
 	wget https://pecl.php.net/get/memcache-2.2.7.tgz -O php/memcache.tgz
 	wget https://pecl.php.net/get/xhprof-0.9.4.tgz -O php/xhprof.tgz
 	wget https://getcomposer.org/composer.phar -O php/composer.phar
-
+	mkdir ~/opt ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/htdocs ~/opt/www
+	
 build:
 	make build-nginx
 	make build-mysql
 	make build-php
 	make build-node
-
+	
 build-nginx:
 	docker build -t env/nginx ./nginx
 
@@ -76,4 +76,6 @@ run-gearman:
 	docker run -d -p 4730:4730 -v ~/opt:/opt -it env/gearman
 
 clean:
+	docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+	docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 	docker images|grep none|awk '{print $3 }'|xargs docker rmi

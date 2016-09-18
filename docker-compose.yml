@@ -2,10 +2,10 @@ nginx:
     build: ./nginx
     ports:
       - "80:80"
-    links:
-      - "php"
     volumes:
       - ~/opt:/opt
+    links:
+      - "php"
 
 php:
     build: ./php
