@@ -16,7 +16,7 @@ init:
 	wget https://pecl.php.net/get/memcache-2.2.7.tgz -O php/memcache.tgz
 	wget https://pecl.php.net/get/xhprof-0.9.4.tgz -O php/xhprof.tgz
 	wget https://getcomposer.org/composer.phar -O php/composer.phar
-	mkdir ~/opt ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/htdocs ~/opt/www
+	mkdir ~/opt ~/opt/run ~/opt/data ~/opt/data/mysql ~/opt/data/elasticsearch ~/opt/log ~/opt/log/nginx ~/opt/log/php ~/opt/log/mysql ~/opt/htdocs ~/opt/www
 	
 build:
 	make build-nginx
@@ -75,7 +75,9 @@ build-gearman:
 run-gearman:
 	docker run -d -p 4730:4730 -v ~/opt:/opt -it env/gearman
 
-clean:
+stop:
 	docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
 	docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+
+clean:
 	docker images|grep none|awk '{print $3 }'|xargs docker rmi

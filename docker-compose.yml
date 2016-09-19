@@ -5,19 +5,20 @@ nginx:
     volumes:
       - ~/opt:/opt
     links:
-      - "php"
+        - php:php
 
 php:
     build: ./php
     ports:
       - "9000:9000"
     links:
-      - "mysql"
-      - "memcache"
-      - "redis"
-      - "gearman"
+      - mysql:mysql
+      - memcache:memcache
+      - redis:redis
+      - gearman:gearman
     volumes:
       - ~/opt:/opt
+      - ~/opt/run:/var/run/mysqld
 
 mysql:
     build: ./mysql
@@ -25,11 +26,25 @@ mysql:
       - "3306:3306"
     volumes:
       - ~/opt/data/mysql:/var/lib/mysql
+      - ~/opt/run:/var/run/mysqld
+      - ~/opt/data/mysql:/var/log/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
 
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql:mysql
+    ports: 
+      - 8080:80
+    environment:
+        MYSQL_USERNAME: root 
+        MYSQL_PASS: 123456
+        PMA_HOST: mysql
+
 memcache:
     build: ./memcache
+    command: memcached -m 64
     ports:
       - "11211:11211"
 
@@ -37,10 +52,18 @@ redis:
     build: ./redis
     ports:
       - "6379:6379"
-
+    volumes: 
+      - ~/opt/run/redis6379.pid:/data/redis6379.pid
+      - ~/opt/data/redis:/data
 gearman:
     build: ./gearman
     ports:
       - "4730:4730"
     volumes:
       - ~/opt:/opt
+
+# elasticsearch:
+#   image: elasticsearch
+#   ports:
+#     - "9200:9200"
+    # - "9300:9300"

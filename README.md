@@ -1,5 +1,3 @@
-# Run Under Mac
-
 ## 环境要求
 
 Mac系统，已经安装过以下组件：
@@ -56,6 +54,7 @@ fi
 
 
 ### 设置Docker镜像，加速下载
+###推荐用daocloud 加速器
 
 Mac下：
 
@@ -103,8 +102,9 @@ docker-compose up
 ```
 sudo vim /etc/hosts
 加入
-192.168.59.103 docker
+127.0.0.1 docker
 ```
 
 现在可以通过访问`http://docker/`来查看Web服务器根目录
 
+http://docker:8080 为 phpmyadmin 入口
