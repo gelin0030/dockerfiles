@@ -2,23 +2,31 @@ nginx:
     build: ./nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ~/opt:/opt
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-enabled/:/etc/nginx/sites-enabled/
     links:
         - php:php
 
 php:
-    build: ./php
+    # build: ./php
+    build: ./php7
+    # image: engine_php7
     ports:
       - "9000:9000"
     links:
       - mysql:mysql
       - memcache:memcache
       - redis:redis
-      - gearman:gearman
+      # - gearman:gearman
     volumes:
       - ~/opt:/opt
       - ~/opt/run:/var/run/mysqld
+      # - ~/opt/conf/php:/usr/local/etc/php
+      # - ~/opt/conf/php:/usr/local/etc/php-fpm.conf
 
 mysql:
     build: ./mysql
@@ -29,18 +37,7 @@ mysql:
       - ~/opt/run:/var/run/mysqld
       - ~/opt/data/mysql:/var/log/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-
-phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links:
-      - mysql:mysql
-    ports: 
-      - 8080:80
-    environment:
-        MYSQL_USERNAME: root 
-        MYSQL_PASS: 123456
-        PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: "Sohpeter123"
 
 memcache:
     build: ./memcache
@@ -52,15 +49,27 @@ redis:
     build: ./redis
     ports:
       - "6379:6379"
-    volumes: 
-      - ~/opt/run/redis6379.pid:/data/redis6379.pid
-      - ~/opt/data/redis:/data
-gearman:
-    build: ./gearman
-    ports:
-      - "4730:4730"
     volumes:
-      - ~/opt:/opt
+      - ~/opt/run/redis6379.pid:/data/redis6379.pid
+      - ~/opt/data/redis:/datas
+
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql:mysql
+    ports:
+      - 8080:80
+    environment:
+        MYSQL_USERNAME: root
+        MYSQL_PASS: "Sohpeter123"
+        PMA_HOST: mysql
+
+# gearman:
+    # build: ./gearman
+    # ports:
+    #   - "4730:4730"
+    # volumes:
+    #   - ~/opt:/opt
 
 # elasticsearch:
 #   image: elasticsearch
